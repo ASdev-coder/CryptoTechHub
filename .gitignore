@@ -8,3 +8,6 @@ obj/
 node_modules/
 
 .DS_Store
+
+appsettings.json
+appsettings.Development.json

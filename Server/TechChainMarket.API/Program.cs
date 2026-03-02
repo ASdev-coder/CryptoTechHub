@@ -1,31 +1,38 @@
+using Amazon.S3;
 using Microsoft.EntityFrameworkCore;
+using TechChainMarket.Core.Interfaces;
 using TechChainMarket.Infrastructure.Data;
+using TechChainMarket.Infrastructure.Services;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy("ReactCors", policy =>
-//     {
-//         policy
-//             .WithOrigins("http://localhost:3000")
-//             .AllowAnyHeader()
-//             .AllowAnyMethod();
-//     });
-// });
+var awsOptions = builder.Configuration.GetAWSOptions("AWS");
+awsOptions.Credentials = new Amazon.Runtime.BasicAWSCredentials(
+    builder.Configuration["AWS:AccessKey"], 
+    builder.Configuration["AWS:SecretKey"]
+);
+builder.Services.AddDefaultAWSOptions(awsOptions);
+builder.Services.AddAWSService<IAmazonS3>();
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IFileStorageService, S3StorageService>();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
 
-// app.UseCors("ReactCors");
-
+app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
