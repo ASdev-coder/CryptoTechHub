@@ -1,0 +1,10 @@
+bin/
+obj/
+
+.vs/
+.idea/
+*.sln
+
+node_modules/
+
+.DS_Store
