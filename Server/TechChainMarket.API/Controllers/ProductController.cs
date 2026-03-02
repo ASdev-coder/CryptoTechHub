@@ -2,11 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using TechChainMarket.Core.Entities;
 using TechChainMarket.Core.Interfaces;
 using TechChainMarket.Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
+using TechChainMarket.API.DTOs;
 
 namespace TechChainMarket.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ProductsController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -19,20 +22,21 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProduct([FromForm] string title, [FromForm] string description, [FromForm] decimal priceWei, [FromForm] string category, IFormFile image)
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> CreateProduct([FromForm] ProductCreateDto dto)
     {
-        if (image == null || image.Length == 0)
+        if (dto.Image == null || dto.Image.Length == 0)
             return BadRequest("Image is required");
         
-        using var stream = image.OpenReadStream();
-        var imageUrl = await _fileService.UploadFileAsync(stream, image.FileName, image.ContentType);
+        using var stream = dto.Image.OpenReadStream();
+        var imageUrl = await _fileService.UploadFileAsync(stream, dto.Image.FileName, dto.Image.ContentType);
         
         var product = new Product
         {
-            Title = title,
-            Description = description,
-            PriceWei = priceWei,
-            Category = category,
+            Title = dto.Title,
+            Description = dto.Description,
+            PriceWei = dto.PriceWei,
+            Category = dto.Category,
             ImageUrl = imageUrl,
             IsActive = true
         };

@@ -10,4 +10,5 @@ public class User
     public string? Bio { get; set; }
     public string? ProfileImageUrl { get; set; }
     public UserRole Role { get; set; } = UserRole.User;
+    public string? Nonce { get; set; }
 }
