@@ -3,6 +3,7 @@ using TechChainMarket.Core.Entities;
 using TechChainMarket.Core.Interfaces;
 using TechChainMarket.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using TechChainMarket.API.DTOs;
 
 namespace TechChainMarket.API.Controllers;
@@ -22,7 +23,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     public async Task<IActionResult> CreateProduct([FromForm] ProductCreateDto dto)
     {
         if (dto.Image == null || dto.Image.Length == 0)
@@ -45,5 +46,13 @@ public class ProductsController : ControllerBase
         await _context.SaveChangesAsync();
 
         return Ok(product);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetAllProducts()
+    {
+        var products = await _context.Products.ToListAsync();
+        
+        return Ok(products);
     }
 }

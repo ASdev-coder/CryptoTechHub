@@ -47,7 +47,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+builder.Services.AddHostedService<TechChainMarket.Infrastructure.BackgroundServices.BlockchainListenerService>();
+
 var app = builder.Build();
+
+app.UseCors("AllowReactApp");
 
 if (app.Environment.IsDevelopment())
 {
