@@ -1,3 +1,4 @@
+using System.Numerics;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 
 namespace TechChainMarket.Core.Events;
@@ -12,5 +13,5 @@ public class ProductPurchasedEventDTO : IEventDTO
     public string Buyer { get; set; }
 
     [Parameter("uint256", "_price", 3, false)]
-    public long Price { get; set; }
+    public BigInteger Price { get; set; }
 }

@@ -57,7 +57,8 @@ public class UsersController : ControllerBase
         { 
             user.Username, 
             user.Bio, 
-            user.ProfileImageUrl 
+            user.ProfileImageUrl,
+            isBlocked = user.IsBlocked
         });
     }
     
@@ -78,24 +79,19 @@ public class UsersController : ControllerBase
         { 
             user.Username, 
             user.Bio, 
-            user.ProfileImageUrl 
+            user.ProfileImageUrl,
+            isBlocked = user.IsBlocked
         });
     }
     
     [HttpGet]
-    [Authorize(Roles = "Admin, SuperAdmin")]
-    public async Task<IActionResult> GetAllUsers()
+    [Authorize(Roles = "Admin,SuperAdmin,Owner")]
+    public async Task<IActionResult> GetUsers()
     {
+        var currentUserWallet = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
         var users = await _context.Users
-            .Select(u => new 
-            {
-                u.Id,
-                u.WalletAddress,
-                u.Username,
-                u.Bio,
-                u.ProfileImageUrl,
-                u.Role
-            })
+            .Where(u => u.WalletAddress != currentUserWallet)
             .ToListAsync();
 
         return Ok(users);

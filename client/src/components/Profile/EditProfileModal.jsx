@@ -21,7 +21,12 @@ const EditProfileModal = ({
     if (isOpen && currentProfile) {
       setUserName(currentProfile.username || "");
       setBio(currentProfile.bio || "");
-      setPreviewUrl(currentProfile.profileImageUrl || "");
+
+      const initialUrl = currentProfile.profileImageUrl
+        ? `${currentProfile.profileImageUrl}?t=${new Date().getTime()}`
+        : "";
+
+      setPreviewUrl(initialUrl);
       setImageFile(null);
       setError("");
     }
@@ -57,7 +62,15 @@ const EditProfileModal = ({
         },
       });
 
-      onUpdateSuccess(response.data);
+      const timestamp = new Date().getTime();
+      const updatedProfile = {
+        ...response.data,
+        profileImageUrl: response.data.profileImageUrl
+          ? `${response.data.profileImageUrl}?t=${timestamp}`
+          : null,
+      };
+
+      onUpdateSuccess(updatedProfile);
       onClose();
     } catch (err) {
       console.error(err);
@@ -86,7 +99,6 @@ const EditProfileModal = ({
         {error && <div className="modal-error">{error}</div>}
 
         <form onSubmit={handleSubmit} className="profile-form">
-
           <div className="avatar-upload-section">
             <div className="avatar-preview">
               {previewUrl ? (

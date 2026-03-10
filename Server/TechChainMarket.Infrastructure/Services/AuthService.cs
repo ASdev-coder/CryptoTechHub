@@ -12,12 +12,14 @@ public class AuthService
         try
         {
             var signer = new EthereumMessageSigner();
-
-            var recoveredAddress = signer.EncodeUTF8AndEcRecover(nonce, signature);
+            
+            var message = $"TechChainMarket login: {nonce}";
+            
+            var recoveredAddress = signer.EncodeUTF8AndEcRecover(message, signature);
             
             return string.Equals(recoveredAddress, walletAddress, StringComparison.OrdinalIgnoreCase);
         }
-        catch
+        catch (Exception)
         {
             return false;
         }

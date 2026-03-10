@@ -49,10 +49,63 @@ public class ProductsController : ControllerBase
     }
     
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAllProducts()
     {
         var products = await _context.Products.ToListAsync();
         
         return Ok(products);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateProduct(int id, [FromForm] ProductUpdateDto dto)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        product.Title = dto.Title;
+        product.Description = dto.Description;
+        product.PriceWei = decimal.Parse(dto.PriceWei);
+        product.Category = dto.Category;
+        product.IsActive = dto.IsActive;
+
+        if (dto.Image != null && dto.Image.Length > 0)
+        {
+            using var stream = dto.Image.OpenReadStream();
+            product.ImageUrl = await _fileService.UploadFileAsync(stream, dto.Image.FileName, dto.Image.ContentType);
+        }
+        else if (!string.IsNullOrWhiteSpace(dto.ImageUrl))
+        {
+            product.ImageUrl = dto.ImageUrl;
+        }
+
+        await _context.SaveChangesAsync();
+        return Ok(product);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        catch
+        {
+            product.IsActive = false;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

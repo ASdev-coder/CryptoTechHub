@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../components/Header/Header";
 import SearchInput from "../../components/SearchInput/SearchInput";
 import Products from "../../components/Products/Products";
 import "../AdminPage/AdminPage.css";
 
-const UserPage = ({ logout, account, avatarUrl, userProfile, setUserProfile }) => {
+const UserPage = ({
+  logout,
+  account,
+  avatarUrl,
+  userProfile,
+  onProfileUpdate,
+}) => {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <div className="admin-page-wrapper">
       <Header
@@ -13,9 +21,13 @@ const UserPage = ({ logout, account, avatarUrl, userProfile, setUserProfile }) =
         avatarUrl={avatarUrl}
         role="User"
         userProfile={userProfile}
-        onProfileUpdate={setUserProfile}
+        onProfileUpdate={onProfileUpdate}
       >
-        <SearchInput placeholder="Пошук по каталогу техніки..." />
+        <SearchInput
+          placeholder="Пошук по каталогу техніки..."
+          value={searchQuery}
+          onChange={setSearchQuery}
+        />
       </Header>
 
       <div className="admin-content">
@@ -29,13 +41,11 @@ const UserPage = ({ logout, account, avatarUrl, userProfile, setUserProfile }) =
         >
           🛒 Маркетплейс Техніки
         </h1>
-
         <div className="marketplace-section">
-          <Products role="User" />
+          <Products role="User" searchTerm={searchQuery} />
         </div>
       </div>
     </div>
   );
 };
-
 export default UserPage;

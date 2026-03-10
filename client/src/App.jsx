@@ -11,33 +11,54 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import SuperAdminPage from "./pages/SuperAdminPage/SuperAdminPage";
 import UserPage from "./pages/UserPage/UserPage";
 import OwnerPage from "./pages/OwnerPage/OwnerPage";
-
+import BlockedPage from "./pages/BlockedPage/BlockedPage";
 
 function App() {
-  const { account, token, loading, userProfile, loginWithWeb3, logout, setUserProfile } =
-    useWeb3Auth();
+  const {
+    account,
+    token,
+    loading,
+    userProfile,
+    isBlocked,
+    loginWithWeb3,
+    logout,
+    setUserProfile,
+  } = useWeb3Auth();
 
-  const getUserRole = () => {
-    if (!token) return null;
+  const getUserData = () => {
+    if (!token) return { role: null, tokenBlocked: false };
     try {
       const decoded = jwtDecode(token);
-      console.log("Декодований токен:", decoded);
-      return (
+      if (!decoded) return { role: null, tokenBlocked: false };
+
+      const role =
         decoded.role ||
-        decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
-      );
+        decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+      const rawBlocked = decoded.isBlocked || decoded.IsBlocked;
+      const tokenBlocked = String(rawBlocked).toLowerCase() === "true";
+
+      return { role, tokenBlocked };
     } catch (error) {
-      console.error("Помилка читання токена", error);
-      return null;
+      console.error("JWT Decode Error:", error);
+      return { role: null, tokenBlocked: false };
     }
   };
 
-  const role = getUserRole();
+  const { role, tokenBlocked } = getUserData();
+
+  const isActuallyBlocked =
+    isBlocked || tokenBlocked || userProfile?.isBlocked === true;
 
   return (
     <Router>
       <Routes>
-        {!token || loading ? (
+        {isActuallyBlocked ? (
+          <>
+            <Route path="/blocked" element={<BlockedPage logout={logout} />} />
+            <Route path="*" element={<Navigate to="/blocked" replace />} />
+          </>
+        ) : !token ? (
           <Route
             path="*"
             element={
@@ -47,81 +68,63 @@ function App() {
         ) : (
           <>
             {role === "User" && (
-              <>
-                <Route
-                  path="/marketplace"
-                  element={
-                    <UserPage
-                      logout={logout}
-                      account={account}
-                      avatarUrl={userProfile?.profileImageUrl}
-                      userProfile={userProfile}
-                      onProfileUpdate={setUserProfile}
-                    />
-                  }
-                />
-                <Route
-                  path="*"
-                  element={<Navigate to="/marketplace" replace />}
-                />
-              </>
+              <Route
+                path="*"
+                element={
+                  <UserPage
+                    logout={logout}
+                    account={account}
+                    userProfile={userProfile}
+                    onProfileUpdate={setUserProfile}
+                  />
+                }
+              />
             )}
-
             {role === "Admin" && (
-              <>
-                <Route
-                  path="/admin"
-                  element={
-                    <AdminPage
-                      logout={logout}
-                      account={account}
-                      avatarUrl={userProfile?.profileImageUrl}
-                      userProfile={userProfile}
-                      onProfileUpdate={setUserProfile}
-                    />
-                  }
-                />
-                <Route path="*" element={<Navigate to="/admin" replace />} />
-              </>
+              <Route
+                path="*"
+                element={
+                  <AdminPage
+                    logout={logout}
+                    account={account}
+                    userProfile={userProfile}
+                    onProfileUpdate={setUserProfile}
+                  />
+                }
+              />
             )}
-
             {role === "SuperAdmin" && (
-              <>
-                <Route
-                  path="/superadmin"
-                  element={
-                    <SuperAdminPage
-                      logout={logout}
-                      account={account}
-                      avatarUrl={userProfile?.profileImageUrl}
-                      userProfile={userProfile}
-                      onProfileUpdate={setUserProfile}
-                    />
-                  }
-                />
-                <Route
-                  path="*"
-                  element={<Navigate to="/superadmin" replace />}
-                />
-              </>
+              <Route
+                path="*"
+                element={
+                  <SuperAdminPage
+                    logout={logout}
+                    account={account}
+                    userProfile={userProfile}
+                    onProfileUpdate={setUserProfile}
+                  />
+                }
+              />
+            )}
+            {role === "Owner" && (
+              <Route
+                path="*"
+                element={
+                  <OwnerPage
+                    logout={logout}
+                    account={account}
+                    userProfile={userProfile}
+                    onProfileUpdate={setUserProfile}
+                  />
+                }
+              />
             )}
 
-            {role === "Owner" && (
-              <>
-                <Route
-                  path="/owner"
-                  element={
-                    <OwnerPage
-                      logout={logout}
-                      account={account}
-                      avatarUrl={userProfile?.profileImageUrl}
-                      userProfile={userProfile}
-                      onProfileUpdate={setUserProfile}
-                    />
-                  }
-                />
-                <Route path="*" element={<Navigate to="/owner" replace />} />
-              </>
+            {!role && (
+              <Route
+                path="*"
+                element={<div className="loading-state">Завантаження...</div>}
+              />
             )}
           </>
         )}

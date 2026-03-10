@@ -1,17 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../components/Header/Header";
 import SearchInput from "../../components/SearchInput/SearchInput";
 import Users from "../../components/Users/Users";
 import Products from "../../components/Products/Products";
 import "../AdminPage/AdminPage.css";
 
+const SuperAdminPage = ({
+  logout,
+  account,
+  avatarUrl,
+  userProfile,
+  onProfileUpdate,
+}) => {
+  const [productSearch, setProductSearch] = useState("");
+  const [userSearch, setUserSearch] = useState("");
 
-const SuperAdminPage = ({ logout, account, avatarUrl, userProfile, setUserProfile }) => {
   return (
     <div className="admin-page-wrapper">
-      <Header logout={logout} account={account} avatarUrl={avatarUrl} userProfile={userProfile} onProfileUpdate={setUserProfile}>
-        <SearchInput placeholder="Шукати юзерів" />
-        <SearchInput placeholder="Шукати товари..." />
+      <Header
+        logout={logout}
+        account={account}
+        avatarUrl={avatarUrl}
+        userProfile={userProfile}
+        onProfileUpdate={onProfileUpdate}
+      >
+        <SearchInput
+          placeholder="Шукати юзерів..."
+          value={userSearch}
+          onChange={setUserSearch}
+        />
+        <SearchInput
+          placeholder="Шукати товари..."
+          value={productSearch}
+          onChange={setProductSearch}
+        />
       </Header>
 
       <div className="admin-content">
@@ -23,21 +45,18 @@ const SuperAdminPage = ({ logout, account, avatarUrl, userProfile, setUserProfil
             WebkitTextFillColor: "transparent",
           }}
         >
-          👑 Панель Головного Адміністратора (Super Admin)
+          Панель Головного Адміністратора
         </h1>
-
         <div className="admin-panel">
           <div className="admin-main-section">
-            <Products role="Admin" />
+            <Products role="Admin" searchTerm={productSearch} />
           </div>
-
           <div className="admin-side-section">
-            <Users role="SuperAdmin" />
+            <Users role="SuperAdmin" searchTerm={userSearch} />
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 export default SuperAdminPage;

@@ -1,0 +1,128 @@
+.details-modal-content {
+  max-width: 600px !important;
+  padding: 0 !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.details-close-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 10;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.details-close-btn:hover {
+  background: rgba(15, 23, 42, 0.95);
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+.details-image-container {
+  width: 100%;
+  height: 320px;
+  background: rgba(15, 23, 42, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.details-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 20px;
+}
+
+.empty-photo {
+  font-size: 24px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.details-info {
+  padding: 30px;
+}
+
+.details-header {
+  margin-bottom: 20px;
+}
+
+.details-badge {
+  position: static !important;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.details-title {
+  margin: 0;
+  font-size: 24px;
+  color: #f8fafc;
+  word-wrap: break-word;
+  line-height: 1.3;
+}
+
+.details-desc {
+  max-height: 200px;
+  overflow-y: auto;
+  color: #cbd5e1;
+  line-height: 1.6;
+  font-size: 15px;
+  margin-bottom: 24px;
+  padding-right: 12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.details-desc::-webkit-scrollbar {
+  width: 6px;
+}
+.details-desc::-webkit-scrollbar-track {
+  background: transparent;
+}
+.details-desc::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+.details-desc::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.details-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 24px;
+}
+
+.details-price {
+  font-size: 26px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.details-price .eth-symbol {
+  color: #3b82f6;
+  margin-right: 8px;
+}
+
+.details-buy-btn {
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+}

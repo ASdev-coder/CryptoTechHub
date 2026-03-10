@@ -11,4 +11,5 @@ public class User
     public string? ProfileImageUrl { get; set; }
     public UserRole Role { get; set; } = UserRole.User;
     public string? Nonce { get; set; }
+    public bool IsBlocked { get; set; } = false;
 }

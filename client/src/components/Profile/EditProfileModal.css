@@ -1,4 +1,3 @@
-/* Фон модального вікна (затемнення) */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -15,7 +14,6 @@
     animation: fadeIn 0.2s ease-out;
 }
 
-/* Сама картка */
 .modal-content {
     background: rgba(15, 23, 42, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -68,7 +66,6 @@
     text-align: center;
 }
 
-/* Форма та поля */
 .profile-form {
     display: flex;
     flex-direction: column;
@@ -159,7 +156,6 @@
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
-/* Кнопки внизу */
 .modal-actions {
     display: flex;
     justify-content: flex-end;
