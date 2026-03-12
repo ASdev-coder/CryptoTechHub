@@ -1,0 +1,160 @@
+.users-container {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.panel-header h2 {
+  font-size: 1.25rem;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.btn-assign-admin {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.btn-assign-admin:hover {
+  transform: translateY(-1px);
+}
+
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.user-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar-mini {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #334155;
+}
+
+.user-avatar-mini img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder-mini {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #64748b, #475569);
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e2e8f0;
+}
+
+.role-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.role-badge.owner {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid #ef4444;
+}
+.role-badge.super-admin {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  border: 1px solid #a855f7;
+}
+.role-badge.admin {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid #3b82f6;
+}
+.role-badge.user {
+  background: rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+  border: 1px solid #64748b;
+}
+
+.user-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wallet-address {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.user-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btn-action {
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 4px 8px;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+
+.btn-action.block {
+  border: 1px solid #f59e0b;
+  color: #f59e0b;
+}
+
+.btn-action.block:hover {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.btn-action.remove {
+  border: 1px solid #ef4444;
+  color: #ef4444;
+}
+
+.btn-action.remove:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
